@@ -10,7 +10,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/型態-Claude%20Skill-FDC302?style=flat-square&labelColor=161415" alt="型態">
   <img src="https://img.shields.io/badge/工具-Tripo%20%2B%20Blender-F5F5F5?style=flat-square&labelColor=161415" alt="工具">
-  <img src="https://img.shields.io/badge/來源-3%20篇筆記-F5F5F5?style=flat-square&labelColor=161415" alt="來源">
+  <img src="https://img.shields.io/badge/來源-3%20篇筆記・同一位講者-F5F5F5?style=flat-square&labelColor=161415" alt="來源">
+  <img src="https://img.shields.io/badge/狀態-未實測-F5F5F5?style=flat-square&labelColor=161415" alt="狀態">
 </p>
 
 <p align="center">
@@ -22,11 +23,12 @@
 </p>
 
 這是一支 Claude 技能，把「AI 生設定圖 → Tripo 生 3D → Blender 手修」這條線整理成 8 關 SOP。
-以前要做一隻吉祥物的 3D 版，得先找 3D 師開 Blender 從零捏起，光估工時就要開一次會；現在 AI 幾十秒給你一個六成像的粗胚，剩下四成才是人要花的時間。
+以前要做一隻吉祥物的 3D 版，得先找 3D 師開 Blender 從零捏起，光估工時就要開一次會；現在 AI 幾十秒給你一個粗胚（講者自己的說法在六成到八成像之間：兔子篇說八成、200 小時篇說六十分），剩下那兩到四成才是人要花的時間。
 看完這篇，你會知道哪幾段真的能交給 AI、哪幾段還是要人，而且可以直接叫 Claude 帶你走一遍。
 
 > [!NOTE]
 > 這份技能是從三支同一位講者的實作影片筆記整理出來的，講者走的全是「可愛／動畫風」角色。寫實或硬表面沒驗證過，先別套。
+> 而且公司還沒有人照著跑過一次（`status: 未實測`），現在它是「入門教材＋估工時框架」，不是生產 SOP。第一個跟做的人請計時、記面數與重生次數，補進 [docs/GAPS.md](docs/GAPS.md)。
 
 ## ✨ 這個技能能做什麼
 
@@ -83,6 +85,16 @@ Claude：好，從第 2 關開始。先檢查這張是不是站直、四肢張�
 
 ## 🧭 流程總覽
 
+先看講者自己畫的那張流程圖，這張是三支影片裡最值錢的一張：
+
+![看哪裡：11 格流程，每格下方的顏色標籤就是用哪個工具](assets/shots/01-03.jpg)
+<sub>黃＝生圖 AI、綠＝Tripo、橘＝Blender、紫＝AccuRIG／AutoRigPro、藍＝Unity。AI 真正接手的只有 1、2、8 三格，其他都是人在 Blender 裡做。這支技能涵蓋到第 5 格「重拓撲」為止。</sub>
+
+![看哪裡：同一張流程圖的放大版，標了哪幾格用 AI](assets/shots/02-03.jpg)
+<sub>200 小時篇把同一條流程重畫了一次，結論一樣：AI 負責 11 格裡的 3 格。</sub>
+
+下面是這支技能的 8 關怎麼對應到那張圖：
+
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'PingFang TC, Microsoft JhengHei, Noto Sans TC, sans-serif','primaryColor':'#FFFFFF','primaryTextColor':'#161415','primaryBorderColor':'#161415','lineColor':'#8A6400','tertiaryColor':'#F5F5F5','clusterBkg':'#F5F5F5'}}}%%
 flowchart LR
@@ -112,17 +124,35 @@ flowchart LR
 
 **講者在講什麼**：先畫一張 AI 建模工作流程圖再動手，這張圖是全片最值錢的東西。角色要先有「身分證」（Character Sheet）與對齊的三視圖，然後拆成裸模、五官、服裝分開生 3D，一次生整隻壞一塊就全部重來。AI 給的是八成像，剩下兩成進 Blender 對照設定圖一刀一刀雕，用對半鏡射省一半時間。
 
+![看哪裡：角色設定圖定稿，臉、衣服、包包、配色一張講完](assets/shots/01-05.jpg)
+<sub>第 2 關的產出長這樣。之後每一關都拿它來比對，所以這張要先定案。</sub>
+
+![看哪裡：Blender 裡開對半鏡射，只修左半邊](assets/shots/01-12.jpg)
+<sub>第 8 關的省時關鍵：修一邊、另一邊自動跟著，也保證對稱。</sub>
+
 **我們的判斷**：這篇最適合當公司的入門教材，因為它把「AI 做哪段、人守哪段」講得最清楚。拆零件的做法我們認為可以直接用，而且不只 3D，簡報與影片素材的版本管理也適用。要調整的是它完全沒有數字，面數、解析度、要重生幾版都得自己補。「Blender 還是要會一點」這句我們信，美術組以外的人跟做前要先摸過移動旋轉縮放。
 
 ### 《花200小時用AI做3D角色，學到什麼》
 
 **講者在講什麼**：他實際花了 200 小時用 Tripo 加 Blender 做一整組角色，畫面右上角的計時器一路跳到 131 小時。結論是 AI 只負責 11 格流程裡的 3 格，「從零到一」很快，「從六十分到可用」還是人，那 20 分常佔一半工時。量產的訣竅是多視角設定圖與零件庫。他最後想用 API 全自動化，自己把流程圖標成 NG 版：Smart Mesh 在 API 上用不到，而且自動生完後修正反而變多。
 
+![看哪裡：AI 生出來的網格線，面的分布很不規則](assets/shots/02-06.jpg)
+<sub>這就是「從六十分到可用」要花一半工時的原因：臉部網格要整個重拉。</sub>
+
+![看哪裡：講者把自己的自動化流程圖標成「NG 版」](assets/shots/02-09.jpg)
+<sub>想用 API 全自動化的人先看這張。Smart Mesh 在 API 上用不到，自動生完修正反而變多。</sub>
+
 **我們的判斷**：這篇不是教學，是真實工時紀錄，所以我們把它放進判斷表而不是步驟。最有用的兩條：道具、配角、場景小物優先給 AI，主角與特寫留人工；規劃任何自動化前先列「只有 UI 有、API 沒有」的功能。這兩條我們覺得可以直接寫進專案估算的 SOP。要存疑的是 200 小時這個數字，那是他邊學邊做的時間，不能拿來估我們的工時，要自己計時一次。
 
 ### 《用AI做3D角色，從一張圖到完整模型》
 
 **講者在講什麼**：先跟 Claude 聊角色設定，生一張正面、站直、四肢張開的站姿圖，丟 Tripo 時選分件、四角面、面數 2,000～6,000。Tripo 自己就能框選重做壞掉的區域、智慧 UV 自動展開、貼圖開去除光影。進 Blender 後可以接 Blender MCP 讓 Claude 用講的排場景，但要先備份。真正的工時在修拓撲：M→At Center 收破洞、Ctrl+L 選連通、Shift+H 只留要修的那塊，最後用 Mirror 做眼睛。
+
+![看哪裡：Tripo 的「編輯 Mesh」，框選問題區域只重做那一塊；右上角可見四角面、面數約 5,400](assets/shots/03-07.jpg)
+<sub>第 5 關。先在 Tripo 裡修一輪，能少進 Blender 一次。</sub>
+
+![看哪裡：Blender 的 Mirror 修改器，Mirror Object 指定成身體](assets/shots/03-14.jpg)
+<sub>第 8 關做眼睛的關鍵設定。軸沒對準身體中線，兩邊就會錯開。</sub>
 
 **我們的判斷**：三篇裡最能照著做的一篇，SOP 第 4 到 8 關大半來自這裡。參數與快捷鍵我們直接採用。要調整的是面數範圍，他做的是可愛小鹿，我們的案子如果要進 UE5 跑即時，面數與拓撲標準要另外訂。Blender MCP 我們認為值得技術組試，它是「AI 直接操作桌面軟體」的實例，但筆記沒講怎麼裝，而且它改真檔的風險講者自己也提醒了。
 
@@ -208,10 +238,11 @@ flowchart LR
 
 這支技能是從筆記整理的，筆記沒講的我們不補。目前最需要人來補的：
 
-1. **後半段流程**：貼圖烘焙、Rigging、匯出到 UE5，三篇都只在流程圖帶過。
-2. **工具版本與方案**：Tripo 的 Quad、Smart Mesh 在哪個方案才有；Blender MCP 怎麼裝。
-3. **驗收標準**：面數怎麼選、拓撲修到什麼程度算好、一隻角色平均幾小時。
-4. **授權**：AI 生成素材商用的條款內容。
+1. **後半段流程**：貼圖烘焙、Rigging、匯出到 UE5，三篇都只在流程圖帶過。流程圖截圖上標的工具是 Blender 烘焙、AccuRIG／AutoRigPro 綁骨、匯入 Unity，但只有工具名沒有步驟。
+2. **實測**：公司還沒有人跑過，`status: 未實測`。第一個跟做的人計時、記面數與重生次數，補回 GAPS 後改成「已實測」。
+3. **工具版本與方案**：Tripo 的 Quad、Smart Mesh 在哪個方案才有；Blender MCP 怎麼裝。
+4. **驗收標準**：面數怎麼選、拓撲修到什麼程度算好、一隻角色平均幾小時。
+5. **授權**：AI 生成素材商用的條款內容。
 
 完整 14 條與「給南瓜的問題」見 [docs/GAPS.md](docs/GAPS.md)。審思過程在 [docs/AUDIT.md](docs/AUDIT.md)，萃取出的概念、步驟、參數、判斷、坑在 [docs/KNOWLEDGE.md](docs/KNOWLEDGE.md)。
 
